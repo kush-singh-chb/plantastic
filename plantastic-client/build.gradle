@@ -1,0 +1,6 @@
+plugins {
+    id 'plantastic.java-library-conventions'
+}
+
+dependencies {
+}

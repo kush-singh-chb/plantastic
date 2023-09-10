@@ -7,7 +7,6 @@ class JoinUtils {
     private JoinUtils() {
         //no-op
     }
-
     public static String join(List<String> source) {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < source.size(); ++i) {

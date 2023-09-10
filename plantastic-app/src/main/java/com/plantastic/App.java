@@ -3,22 +3,12 @@
  */
 package com.plantastic;
 
-import org.apache.commons.text.WordUtils;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.logging.Logger;
-
-import static com.plantastic.JoinUtils.join;
-import static com.plantastic.MessageUtils.getMessage;
-import static com.plantastic.SplitUtils.split;
-
+@SpringBootApplication
 public class App {
     public static void main(String[] args) {
-        Logger logger = Logger.getLogger(App.class.getName());
-        List<String> tokens;
-        tokens = split(getMessage());
-        String result = join(tokens);
-        logger.info(WordUtils.capitalize(result));
+        SpringApplication.run(App.class, args);
     }
 }

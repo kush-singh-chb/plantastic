@@ -1,0 +1,27 @@
+ext {
+    libraries = [:]
+    springCloudVersion = '2021.0.6'
+    springBootVersion = '3.1.3'
+    springSecurityVersion = '5.7.10'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+
+libraries+=[
+        spring_boot_starter_main    : 'org.springframework.boot:spring-boot-starter',
+        spring_boot_starter_web     : 'org.springframework.boot:spring-boot-starter-web',
+        spring_boot_starter_json    : 'org.springframework.boot:spring-boot-starter-json',
+        spring_boot_starter_jetty   : 'org.springframework.boot:spring-boot-starter-jetty',
+        spring_boot_starter_actuator: 'org.springframework.boot:spring-boot-starter-actuator',
+        spring_boot_starter_aop     : 'org.springframework.boot:spring-boot-starter-aop',
+        spring_core_security        : "org.springframework.security:spring-security-core:$springSecurityVersion",
+        spring_web_security         : "org.springframework.security:spring-security-web:$springSecurityVersion",
+        spring_config_processor     : 'org.springframework.boot:spring-boot-configuration-processor',
+        spring_cloud_starter_sleuth : 'org.springframework.cloud:spring-cloud-starter-sleuth',
+        spring_cloud_starter_bootstrap  : 'org.springframework.cloud:spring-cloud-starter-bootstrap',
+]
