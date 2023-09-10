@@ -3,7 +3,7 @@
  */
 package com.plantastic;
 
-class MessageUtils {
+public class MessageUtils {
     private MessageUtils() {
         //no-op
     }
