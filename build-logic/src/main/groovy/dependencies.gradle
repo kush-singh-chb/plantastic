@@ -1,4 +1,4 @@
-ext {
+project.ext {
     libraries = [:]
     springCloudVersion = '2021.0.6'
     springBootVersion = '3.1.3'

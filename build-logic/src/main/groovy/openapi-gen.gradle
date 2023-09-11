@@ -1,0 +1,7 @@
+project.ext.codeGen =[
+        "sourceCopyDir": "src/generated/java"
+]
+
+task deleteGenerateFiles(type: Delete) {
+    delete "$projectDir/${project.ext.codeGen.sourceCopyDir}"
+}
