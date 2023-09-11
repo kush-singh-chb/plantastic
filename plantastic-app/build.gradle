@@ -18,5 +18,13 @@ application {
     mainClass = 'com.plantastic.App'
 }
 
+bootRun {
+    // makes sure that all resources under conf (log config, env specific properties) are available to local run
+    def currentProfile = 'local'
+    classpath += files('conf')
+    systemProperty "spring.profiles.active", currentProfile
+    systemProperty 'deploymentEnv', currentProfile
+}
+
 clean.dependsOn("deleteGenerateFiles")
 compileJava.dependsOn("generateAppApi")
