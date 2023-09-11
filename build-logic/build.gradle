@@ -25,4 +25,5 @@ repositories {
 
 dependencies{
     implementation "org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion"
+    implementation "org.openapitools:openapi-generator-gradle-plugin:7.0.0"
 }

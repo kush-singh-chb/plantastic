@@ -17,3 +17,6 @@ application {
     // Define the main class for the application.
     mainClass = 'com.plantastic.App'
 }
+
+clean.dependsOn("deleteGenerateFiles")
+compileJava.dependsOn("generateAppApi")

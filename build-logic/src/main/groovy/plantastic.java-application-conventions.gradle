@@ -6,8 +6,51 @@
 
 plugins {
     // Apply the common convention plugin for shared build configuration between library and application projects.
+    id "org.openapi.generator"
     id 'plantastic.java-common-conventions'
-
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+}
+project.ext.codeGen = [
+        "inputSpecFile" : "${rootDir}/plantastic-app/openapi.yaml",
+        "dateLibrary": "joda",
+        "useTags": "true",
+        "delegatePattern": "true",
+        "hideGenerationTimestamp": "true",
+        "sourceFolder": "java",
+        "genDir": "$buildDir/code-gen",
+        "sourceCopyDir": "src/generated/java"
+]
+
+task generateAppApi(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    onlyIf {
+        inputs.files("$projectDir/${project.ext.codeGen.sourceCopyDir}")
+        outputs.dir("$projectDir/${project.ext.codeGen.sourceCopyDir}")
+        "${project.name}".contains("app")
+    }
+    generatorName = "spring"
+    inputSpec = "${project.ext.codeGen.inputSpecFile}"
+    outputDir = "${project.ext.codeGen.genDir}"
+    apiPackage = "${project_group}.service.controllers"
+    modelPackage = "${project_group}.common.model"
+    configOptions = [
+            "library": "spring-boot",
+            "returnSuccessCode": "true",
+            "dateLibrary": "${project.ext.codeGen.dateLibrary}",
+            "useTags": "${project.ext.codeGen.useTags}",
+            "delegatePattern": "${project.ext.codeGen.delegatePattern}",
+            "hideGenerationTimestamp": "${project.ext.codeGen.hideGenerationTimestamp}",
+            "sourceFolder": "${project.ext.codeGen.sourceFolder}",
+    ]
+    doLast {
+        copy {
+            from "${project.ext.codeGen.genDir}/java"
+            into "$projectDir/${project.ext.codeGen.sourceCopyDir}"
+        }
+        delete {
+            delete "${project.ext.codeGen.genDir}"
+            delete "src/generated/java/com/plantastic/common"
+            delete "src/generated/java/org"
+        }
+    }
 }

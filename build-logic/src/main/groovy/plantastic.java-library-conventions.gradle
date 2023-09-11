@@ -10,4 +10,91 @@ plugins {
 
     // Apply the java-library plugin for API and implementation separation.
     id 'java-library'
+    id "org.openapi.generator"
+}
+
+project.ext.codeGen = [
+        "inputSpecFile" : "${rootDir}/plantastic-app/openapi.yaml",
+        "dateLibrary": "joda",
+        "useTags": "true",
+        "delegatePattern": "true",
+        "hideGenerationTimestamp": "true",
+        "sourceFolder": "java",
+        "genDir": "$buildDir/code-gen",
+        "sourceCopyDir": "src/generated/java"
+]
+
+sourceSets {
+    main {
+        java {
+            srcDir "src/generated/java"
+            srcDir 'src/main/java'
+        }
+    }
+}
+
+task generateAppClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    onlyIf {
+        inputs.files("$projectDir/${project.ext.codeGen.sourceCopyDir}")
+        outputs.dir("$projectDir/${project.ext.codeGen.sourceCopyDir}")
+        "${project.name}".contains("client")
+    }
+    generatorName = "java"
+    inputSpec = "${project.ext.codeGen.inputSpecFile}"
+    outputDir = "${project.ext.codeGen.genDir}"
+    apiPackage = "${project_group}.client.api"
+    modelPackage = "${project_group}.common.model"
+    invokerPackage = "${project_group}.client.invoker"
+    configOptions = [
+            "library": "resttemplate",
+            "dateLibrary": "${project.ext.codeGen.dateLibrary}",
+            "useTags": "${project.ext.codeGen.useTags}",
+            "delegatePattern": "${project.ext.codeGen.delegatePattern}",
+            "hideGenerationTimestamp": "${project.ext.codeGen.hideGenerationTimestamp}",
+            "sourceFolder": "${project.ext.codeGen.sourceFolder}"
+    ]
+    doLast {
+        copy {
+            from "${project.ext.codeGen.genDir}/java"
+            exclude '**/org/**'
+            exclude '**/common/**'
+            exclude '**/resources/**'
+            into "$projectDir/${project.ext.codeGen.sourceCopyDir}"
+        }
+        delete {
+            delete "${project.ext.codeGen.genDir}"
+        }
+    }
+}
+
+task generateAppModel(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+    onlyIf {
+        inputs.files("$projectDir/${project.ext.codeGen.sourceCopyDir}")
+        outputs.dir("$projectDir/${project.ext.codeGen.sourceCopyDir}")
+        "${project.name}".contains("common")
+    }
+    generatorName = "spring"
+    inputSpec = "${project.ext.codeGen.inputSpecFile}"
+    outputDir = "${projectDir}/src/generated/"
+    modelPackage = "${project_group}.common.model"
+    configOptions = [
+            "library": "spring-boot",
+            "documentationProvider": "source",
+            "dateLibrary": "${project.ext.codeGen.dateLibrary}",
+            "useTags": "${project.ext.codeGen.useTags}",
+            "delegatePattern": "${project.ext.codeGen.delegatePattern}",
+            "hideGenerationTimestamp": "${project.ext.codeGen.hideGenerationTimestamp}",
+            "sourceFolder": "${project.ext.codeGen.sourceFolder}",
+            "additionalModelTypeAnnotations": "@com.fasterxml.jackson.annotation.JsonInclude(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL)"
+    ]
+
+    doLast {
+        delete "$projectDir/src/generated/.openapi-generator"
+        delete "$projectDir/src/generated/src"
+        delete "$projectDir/src/generated/java/org"
+        delete "$projectDir/src/generated/.openapi-generator-ignore"
+        delete "$projectDir/src/generated/pom.xml"
+        delete "$projectDir/src/generated/README.md"
+    }
+
 }

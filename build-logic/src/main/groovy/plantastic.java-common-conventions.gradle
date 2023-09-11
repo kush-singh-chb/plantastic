@@ -8,6 +8,7 @@ plugins {
     // Apply the java Plugin to add support for Java.
     id 'java'
     id 'io.spring.dependency-management'
+    id "org.openapi.generator"
 }
 
 repositories {
@@ -16,32 +17,26 @@ repositories {
     gradlePluginPortal()
     jcenter()
 }
+
 dependencies {
     constraints {
         // Define dependency versions as constraints
         implementation 'org.apache.commons:commons-text:1.9'
         implementation('org.springframework.boot:spring-boot-starter-web')
     }
-    implementation "io.spring.gradle:dependency-management-plugin:1.1.3"
     implementation 'org.springframework.boot:spring-boot-starter-web:3.1.3'
+    implementation "org.openapitools:openapi-generator-gradle-plugin:7.0.0"
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
 }
 
-subprojects {
-    dependencies {
-        constraints{
-            implementation('org.springframework.boot:spring-boot-starter-web')
-        }
-    }
-    implementation "io.spring.gradle:dependency-management-plugin:1.1.3"
-    implementation "org.springframework.boot:spring-boot-starter-web:3.1.3"
-}
+project.ext.codeGen =[
+        "sourceCopyDir": "src/generated/java"
+]
 
-subprojects {
-    dependencies {
-        constraints{
-            implementation('org.springframework.boot:spring-boot-starter-web')
-        }
-    }
+task deleteGenerateFiles(type: Delete) {
+    delete "$projectDir/${project.ext.codeGen.sourceCopyDir}"
 }
 
 testing {

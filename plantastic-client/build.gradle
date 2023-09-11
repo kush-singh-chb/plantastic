@@ -3,4 +3,7 @@ plugins {
 }
 
 dependencies {
+implementation project(path: ':plantastic-common')
 }
+clean.dependsOn("deleteGenerateFiles")
+compileJava.dependsOn("generateAppClient")
