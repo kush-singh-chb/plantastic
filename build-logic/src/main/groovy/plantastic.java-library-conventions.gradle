@@ -23,7 +23,6 @@ project.ext.codeGen = [
         "genDir": "$buildDir/code-gen",
         "sourceCopyDir": "src/generated/java"
 ]
-
 sourceSets {
     main {
         java {
@@ -32,7 +31,6 @@ sourceSets {
         }
     }
 }
-
 task generateAppClient(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
     onlyIf {
         inputs.files("$projectDir/${project.ext.codeGen.sourceCopyDir}")
